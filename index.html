@@ -535,7 +535,7 @@ async function finalizar(){
   if(aprob){cert=PDFS.certificado(jsPDF,dd);hoja=PDFS.hoja30(jsPDF,dd);payload.certificadoPdfBase64=b64(cert);payload.hoja30PdfBase64=b64(hoja);
      payload.certificadoNombre=`Certificado_${D.rut.replace(/\W/g,'')}.pdf`;payload.hoja30Nombre=`Hoja_30hrs_${D.rut.replace(/\W/g,'')}.pdf`;}
   let envio='';
-  if(CONFIG.FLOW_URL){try{await fetch(CONFIG.FLOW_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});envio='sent';}catch(e){envio='fail';}}
+  if(CONFIG.FLOW_URL){try{const r=await fetch(CONFIG.FLOW_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});envio=(r.status>=200&&r.status<300)?'sent':'fail';}catch(e){envio='fail';}}
   else envio='demo';
   let h=`<div class="badge ${aprob?'ok':'ko'}" style="background:${aprob?'#e4f6ec':'#fde8e9'}">${aprob?'APROBADO':'REPROBADO'}</div><div class="big ${aprob?'ok':'ko'}">${pct}%</div><div>${ok} de ${P.length} respuestas correctas</div>`;
   if(aprob){
